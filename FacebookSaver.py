@@ -46,7 +46,7 @@ def save_posts_to_db(properties, page, posts):
     cnx = mysql.connector.connect(user=properties["mysql_user"],
                                   password=properties["mysql_pass"],
                                   host=properties["mysql_host"],
-                                  database="facebook_saver")
+                                  database=properties["mysql_db"])
     cursor = cnx.cursor()
 
     # Add posts to the database

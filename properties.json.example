@@ -2,7 +2,8 @@
   "mysql_host": "localhost",
   "mysql_port": 3306,
   "mysql_user": "root",
-  "mysql_pass": ""
+  "mysql_pass": "",
+  "mysql_db": "facebook_saver",
   "facebook_token": "YOUR_FACEBOOK_TOKEN",
   "facebook_pages": [
     "topotami",
