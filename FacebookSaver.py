@@ -51,29 +51,26 @@ def save_posts_to_db(properties, page, posts):
 
     # Add posts to the database
     for post in posts:
-        if "message" in post:
-            fb_page = page
-            post_id = post["id"]
-            timestamp = post["created_time"]
-            message = post["message"]
+        fb_page = page
+        post_id = post["id"]
+        message = post.get("message", None)
+        story = post.get("story", None)
+        timestamp = post["created_time"]
 
-            # Insert post into database
-            add_post = ("INSERT INTO posts "
-                        "(post_id, page, message, created_time) "
-                        "VALUES (%s, %s, %s, %s)")
+        # Insert post into database
+        add_post = ("INSERT INTO posts "
+                    "(post_id, page, message, story, created_time) "
+                    "VALUES (%s, %s, %s, %s, %s)")
 
-            post_data = (post_id, fb_page, message, timestamp)
+        post_data = (post_id, fb_page, message, story, timestamp)
 
-            try:
-                cursor.execute(add_post, post_data)
-            except mysql.connector.errors.IntegrityError as err:
-                print("Duplicate entry! Stopping for page. (" + err.msg + ")")
+        try:
+            cursor.execute(add_post, post_data)
+        except mysql.connector.errors.IntegrityError as err:
+            print("Duplicate entry! Stopping for page. (" + err.msg + ")")
 
-                no_more_pages = True
-                break
-        else:
-            # todo: do something with stories (?)
-            print("Story ignored...")
+            no_more_pages = True
+            break
 
     # Commit changes to the database
     cnx.commit()
