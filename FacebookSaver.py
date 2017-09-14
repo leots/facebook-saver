@@ -5,6 +5,8 @@
 
 import json
 
+import mysql.connector
+
 
 def get_local_json_contents(json_filename):
     """
@@ -33,6 +35,13 @@ def main():
     properties = get_local_json_contents("properties.json")
 
     print(properties)
+
+    # Connect to database
+    cnx = mysql.connector.connect(user=properties["mysql_user"],
+                                  password=properties["mysql_pass"],
+                                  host=properties["mysql_host"],
+                                  database="facebook_saver")
+    cnx.close()
 
 
 if __name__ == "__main__":
