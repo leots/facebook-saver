@@ -1,6 +1,5 @@
 """
-    Comparison of MySQL connectors for Python:
-    https://stackoverflow.com/a/25724855
+    Needs MySQL connector: https://pypi.python.org/pypi/mysql-connector-python
 """
 
 import json
@@ -36,23 +35,46 @@ def main():
     # Read test JSON Facebook response
     fb_json = get_local_json_contents("test.json")
     fb_json = fb_json["data"]
-    for post in fb_json:
-        if "message" in post:
-            fb_page = "topotami"
-            timestamp = post["created_time"]
-            message = post["message"]
-            post_id = post["id"]
-
-            print(fb_page + " (" + timestamp + "): " + message[0:40] + "...")
-
-        else:
-            print("Story ignored...")
 
     # Connect to database
     cnx = mysql.connector.connect(user=properties["mysql_user"],
                                   password=properties["mysql_pass"],
                                   host=properties["mysql_host"],
                                   database="facebook_saver")
+    cursor = cnx.cursor()
+
+    # Add posts to the database
+    for post in fb_json:
+        if "message" in post:
+            fb_page = "topotami"
+            post_id = post["id"]
+            timestamp = post["created_time"]
+            message = post["message"]
+
+            print(fb_page + " (" + timestamp + ") [" + post_id + "]: "
+                  + message[0:40] + "[...]\nAdding to database...")
+
+            # Insert post into database
+            add_post = ("INSERT INTO posts "
+                        "(post_id, page, message, created_time) "
+                        "VALUES (%s, %s, %s, %s)")
+
+            post_data = (post_id, fb_page, message, timestamp)
+
+            try:
+                cursor.execute(add_post, post_data)
+            except mysql.connector.errors.IntegrityError:
+                print("Duplicate entry! Skipping...")
+        else:
+            print("Story ignored...")
+
+        print()
+
+    # Commit changes to the database
+    cnx.commit()
+
+    # Close the cursor & database connection
+    cursor.close()
     cnx.close()
 
 
