@@ -3,4 +3,14 @@
   "mysql_port": 3306,
   "mysql_user": "root",
   "mysql_pass": ""
+  "facebook_token": "YOUR_FACEBOOK_TOKEN",
+  "facebook_pages": [
+    "topotami",
+    "kentro.aristera",
+    "protovoulia50plus",
+    "diktyoathina",
+    "socialdemoGR",
+    "yeseurope.gr",
+    "pasok.gr"
+  ]
 }
