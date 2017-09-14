@@ -128,6 +128,13 @@ def main():
                   + str(offset + page_size) + "...")
 
             fb_json = get_facebook_posts(fb_api_token, page, offset, page_size)
+
+            # Check for Facebook API error in response, and print it
+            if "error" in fb_json:
+                print("Facebook error:\n" + fb_json["error"]["message"])
+                return
+
+            # No error, get the data and continue
             fb_json = fb_json["data"]
 
             print("\t" + str(len(fb_json)) + " posts on this page")
