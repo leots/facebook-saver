@@ -30,11 +30,23 @@ def get_local_json_contents(json_filename):
 
 
 def main():
-    print("Reading properties.json...\n")
-
+    # Read parameters from JSON properties file
     properties = get_local_json_contents("properties.json")
 
-    print(properties)
+    # Read test JSON Facebook response
+    fb_json = get_local_json_contents("test.json")
+    fb_json = fb_json["data"]
+    for post in fb_json:
+        if "message" in post:
+            fb_page = "topotami"
+            timestamp = post["created_time"]
+            message = post["message"]
+            post_id = post["id"]
+
+            print(fb_page + " (" + timestamp + "): " + message[0:40] + "...")
+
+        else:
+            print("Story ignored...")
 
     # Connect to database
     cnx = mysql.connector.connect(user=properties["mysql_user"],
