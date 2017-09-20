@@ -1,5 +1,6 @@
 """
-    Needs MySQL connector: https://pypi.python.org/pypi/mysql-connector-python
+    MySQL connector: https://pypi.python.org/pypi/mysql-connector-python
+    Requests: http://docs.python-requests.org
 """
 
 import json
